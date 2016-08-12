@@ -55,7 +55,7 @@ function annoying_bell {
     local stop=
     while [ -z "$stop" ]; do
         sleep $(($RANDOM % 300))s || stop=1
-        echo -ne '\007'
+        echo -ne '\007' >/dev/tty || stop=1
     done
 }
 annoying_bell & disown
