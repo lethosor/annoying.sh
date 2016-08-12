@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 
+if [ -z "$BASH" ]; then
+    return
+fi
+
 if [ -z "$__as_command" ]; then
     __as_command=$(command which command)
     if [ -z "$__as_command" ]; then
         return
     fi
+else
+    return
 fi
 
 
@@ -15,6 +21,10 @@ alias clear='echo "Screen cleared!"'
 alias date='date -d "now + $RANDOM days"'
 alias exit='sleep 2'
 alias sudo='sudo echo'
+
+alias builtin=false
+alias unalias=false
+alias alias=true
 
 
 # Command replacements: functions
@@ -58,16 +68,16 @@ function whoami {
 
 # More elaborate annoying features
 
-function delay_prompt_command {
+function _delay_prompt_command {
     export PROMPT_COMMAND="$PROMPT_COMMAND sleep 0.001s;"
 }
-export PROMPT_COMMAND="$PROMPT_COMMAND delay_prompt_command;"
+export PROMPT_COMMAND="$PROMPT_COMMAND _delay_prompt_command;"
 
-function annoying_bell {
+function _annoying_bell {
     local stop=
     while [ -z "$stop" ]; do
         sleep $(($RANDOM % 300))s || stop=1
         echo -ne '\007' >/dev/tty || stop=1
     done
 }
-annoying_bell & disown
+_annoying_bell & disown
