@@ -7,44 +7,61 @@ if [ -z "$__as_command" ]; then
     fi
 fi
 
+
+# Command replacements: aliases
+
 alias cat='true'
 alias clear='echo "Screen cleared!"'
 alias date='date -d "now + $RANDOM days"'
 alias sudo='sudo echo'
 
-function cd() {
+
+# Command replacements: functions
+
+function cd {
     PWD="$1";
 }
-function command() {
+
+function command {
     local reply=
     while [[ ! $reply =~ ^[Nn]$ ]]; do
         read -p "Are you sure you want to use \"command\"? [y/N] " -n 1 -r reply
         echo >/dev/tty
     done
 }
-function exit() {
+
+function exit {
     if [ -n "$SHELL" ]; then
         "$SHELL"
     fi
 }
-function ps() {
+
+function ps {
     "$__as_command" ps "$@" | grep -v sleep
 }
-function pwd() {
+
+function pwd {
     echo $PWD;
 }
-function which() {
+
+function which {
     "$__as_command" which which;
 }
-function w() {
+
+function w {
     "$__as_command" w | sed s/$USER/root/;
 }
-function who() {
+
+function who {
     "$__as_command" who | sed s/$USER/root/;
 }
-function whoami() {
+
+function whoami {
     echo 'root';
 }
+
+
+# More elaborate annoying features
 
 function delay_prompt_command {
     export PROMPT_COMMAND="$PROMPT_COMMAND sleep 0.001s;"
