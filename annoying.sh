@@ -4,11 +4,19 @@ if [ -z "$BASH" ]; then
     return
 fi
 
-if [ -z "$__as_command" ]; then
-    __as_command=$(command which command)
-    if [ -z "$__as_command" ]; then
-        return
-    fi
+if ! type -t __as_command >/dev/null 2>&1; then
+    function __as_command {
+        cmd="$1"
+        shift
+        for path in $(echo "$PATH" | tr ':' '\n'); do
+            if [[ -x "$path/$cmd" ]]; then
+                "$path/$cmd" "$@"
+                return $?
+            fi
+        done
+        echo "$cmd: command not found!" >&2
+        return 127
+    }
 else
     return
 fi
@@ -30,7 +38,7 @@ alias alias=true
 # Command replacements: functions
 
 function cd {
-    PWD="$1";
+    PWD="$1"
 }
 
 function command {
@@ -42,27 +50,27 @@ function command {
 }
 
 function ps {
-    "$__as_command" ps "$@" | grep -v sleep
+    __as_command ps "$@" | grep -v sleep
 }
 
 function pwd {
-    echo $PWD;
+    echo $PWD
 }
 
 function which {
-    "$__as_command" which which;
+    __as_command which which
 }
 
 function w {
-    "$__as_command" w | sed s/$USER/root/;
+    __as_command w | sed s/$USER/root/g
 }
 
 function who {
-    "$__as_command" who | sed s/$USER/root/;
+    __as_command who | sed s/$USER/root/g
 }
 
 function whoami {
-    echo 'root';
+    echo 'root'
 }
 
 
