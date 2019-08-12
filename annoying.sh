@@ -24,7 +24,6 @@ fi
 
 # Command replacements: aliases
 
-alias cat='true'
 alias clear='echo "Screen cleared!"'
 alias date='date -d "now + $RANDOM days"'
 alias exit='sleep 2'
