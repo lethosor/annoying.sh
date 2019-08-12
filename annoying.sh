@@ -41,9 +41,13 @@ function cd {
 }
 
 function command {
-    local reply=
-    while [[ ! $reply =~ ^[Nn]$ ]]; do
-        read -p "Are you sure you want to use \"command\"? [y/N] " -n 1 -r reply
+    if [[ ! -t 0 ]] || [[ ! -t 1 ]] || [[ ! -t 2 ]]; then
+        __as_command "$@"
+        return
+    fi
+    local reply=x
+    while [[ -n "$reply" ]] && [[ ! "$reply" =~ ^[Nn]$ ]]; do
+        read -p "Are you sure you want to use \"command\"? [y/N] " -n 1 -t 10 -r reply
         echo >/dev/tty
     done
 }
