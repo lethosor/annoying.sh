@@ -60,6 +60,10 @@ function pwd {
     echo $PWD
 }
 
+function type {
+    bash -c "type $*"
+}
+
 function which {
     __as_command which which
 }
