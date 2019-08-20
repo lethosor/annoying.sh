@@ -52,6 +52,18 @@ function command {
     done
 }
 
+function ping {
+    tmpfile="$(mktemp)"
+    trap "rm \"$tmpfile\"" RETURN ERR
+    __as_command ping "$@" | head -n2 | tee "$tmpfile"
+    i=$(tail "$tmpfile" | grep -Eo 'seq=[0-9]+' | grep '[0-9]')
+    while true; do
+        i=$((i + 1))
+        tail -n1 "$tmpfile" | sed -E "s/seq=[0-9]+/seq=$i/"
+        sleep 1
+    done
+}
+
 function ps {
     __as_command ps "$@" | grep -v sleep
 }
